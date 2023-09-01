@@ -1,0 +1,20 @@
+version: '3.4'
+services:
+  reservations:
+    build:
+      context: .
+      dockerfile: ./apps/reservations/Dockerfile
+      target: build
+    command: npm run start:dev reservations
+    volumes:
+      - .:/app
+    ports:
+      - '5000:5000'
+    depends_on:
+      - mongo
+    env_file:
+      - .production.env
+  mongo:
+    image: mongo:4.4.22
+    ports:
+      - '27017:27017'
