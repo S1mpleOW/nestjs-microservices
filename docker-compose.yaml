@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: ./apps/reservations/Dockerfile
       target: build
-    command: npm run start:dev reservations
+    command: yarn start:dev reservations
     volumes:
       - .:/app
     ports:
@@ -13,7 +13,21 @@ services:
     depends_on:
       - mongo
     env_file:
-      - .production.env
+      - ./apps/reservations/.production.env
+  auth:
+    build:
+      context: .
+      dockerfile: ./apps/auth/Dockerfile
+      target: build
+    command: yarn start:dev auth
+    volumes:
+      - .:/app
+    ports:
+      - '5001:5001'
+    depends_on:
+      - mongo
+    env_file:
+      - ./apps/auth/.production.env
   mongo:
     image: mongo:4.4.22
     ports:

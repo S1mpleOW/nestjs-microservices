@@ -1,12 +1,7 @@
 import { Prop, Schema } from '@nestjs/mongoose';
 import { SchemaTypes, Types } from 'mongoose';
 
-@Schema({
-  timestamps: {
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-  },
-})
+@Schema()
 export abstract class BaseSchema {
   @Prop({
     type: SchemaTypes.ObjectId,

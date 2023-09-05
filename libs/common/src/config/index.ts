@@ -1,1 +1,2 @@
-export * from './config.module';
+export * from './env.validate';
+export * from './mongo.config';

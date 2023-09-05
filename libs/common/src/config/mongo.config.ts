@@ -1,4 +1,3 @@
-import { ProcessEnvOptions } from 'child_process';
 import { DatabaseConfig, EnvDatabaseConfigForNoSQL } from './config.types';
 
 export const database_config: () => {
@@ -9,7 +8,6 @@ export const database_config: () => {
   const env: NodeJS.ProcessEnv | EnvDatabaseConfigForNoSQL = process.env;
 
   const { MONGODB_URI } = env;
-
   return {
     database: {
       uri: MONGODB_URI,

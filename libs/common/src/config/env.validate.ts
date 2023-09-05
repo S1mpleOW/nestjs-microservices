@@ -1,55 +1,35 @@
 import { InternalServerErrorException } from '@nestjs/common';
 import { plainToInstance } from 'class-transformer';
-import {
-  IsAlphanumeric,
-  IsNotEmpty,
-  IsNumber,
-  IsString,
-  validateSync,
-} from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, validateSync } from 'class-validator';
 
 class EnvironmentValidators {
-  // @IsNotEmpty()
-  // @IsString()
-  // APPLICATION_VERSION: string;
-
   @IsNumber()
-  PORT?: number;
+  PORT: number;
 
   @IsNotEmpty()
   @IsString()
   NODE_ENV: 'development' | 'production';
-
-  // @IsNotEmpty()
-  // @IsString()
-  // SECRET_JWT: string;
-
-  // @IsNotEmpty()
-  // @IsString()
-  // REDIS_HOST: string;
-
-  // @IsNotEmpty()
-  // @IsNumber()
-  // REDIS_PORT: number;
-
-  // @IsString()
-  // REDIS_USERNAME?: string;
-
-  // @IsString()
-  // REDIS_PASSWORD?: string;
-
-  // @IsNotEmpty()
-  // @IsNumber()
-  // REDIS_TTL: number;
-
-  // @IsNotEmpty()
-  // @IsAlphanumeric()
-  // SECRET_KEY: string;
-
-  // @IsNotEmpty()
-  // @IsAlphanumeric()
-  // SECRET_KEY_IV: string;
 }
+
+export class EnvironmentValidatorsForAuthModule extends EnvironmentValidators {
+  @IsNotEmpty()
+  @IsString()
+  JWT_SECRET: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  JWT_EXPIRATION: number;
+
+  @IsNotEmpty()
+  @IsString()
+  TCP_HOST: string;
+
+  @IsNotEmpty()
+  @IsNumber()
+  TCP_PORT: number;
+}
+
+export class EnvironmentValidatorsForReservationModule extends EnvironmentValidators {}
 
 // export class EnvironmentValidatorsForSQL extends EnvironmentValidators {
 //   @IsNotEmpty()
@@ -83,7 +63,7 @@ export class EnvironmentValidatorsForNoSQL extends EnvironmentValidators {
   MONGODB_URI: string;
 }
 
-export function validate(config: Record<string, unknown>) {
+export function validateEnv(config: Record<string, unknown>) {
   const validatedConfig = plainToInstance(
     EnvironmentValidatorsForNoSQL,
     config,
@@ -93,7 +73,7 @@ export function validate(config: Record<string, unknown>) {
   );
 
   const errors = validateSync(validatedConfig, {
-    skipMissingProperties: false,
+    skipMissingProperties: true,
   });
 
   if (errors.length > 0) {
